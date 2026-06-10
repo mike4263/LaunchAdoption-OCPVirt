@@ -1,7 +1,6 @@
 ## Overview
 Welcome to the OpenShift GitOps Foundation Enablement Session. This module provides a comprehensive introduction to OpenShift container concepts, GitOps principles powered by ArgoCD, and a practical application of these skills by deploying the Red Hat Compliance Operator declaratively.
 
-This session is modeled after the `foundation` framework used in the [LaunchAdoption-OCPVirt](https://github.com/nicholasburr/LaunchAdoption-OCPVirt) enablement path, establishing the core infrastructure and operational patterns before moving to advanced workloads.
 
 ## Table of Contents
 1. [Module 1: OpenShift 101](#module-1-openshift-101)
@@ -59,9 +58,6 @@ Instead of navigating the OpenShift Web Console or running manual CLI commands (
 
 ### 3.1 Structure of the GitOps Repository
 To implement this, your Git repository should mimic the following directory structure within your foundation workspace:
-
-Code output
-File successfully written to openshift_gitops_foundation_enablement.md
 
 ```text
 gitops-foundation/
@@ -150,19 +146,20 @@ spec:
 
 
 ## Laboratory Exercise: Deploying Your First GitOps Application
-Prerequisites
-An active OpenShift Cluster (version 4.9+ recommended).
 
-The Red Hat OpenShift GitOps operator installed on the cluster.
+**Prerequisites**
+* An active OpenShift Cluster (version 4.9+ recommended).
 
-Cluster Administrator (cluster-admin) privileges.
+* The Red Hat OpenShift GitOps operator installed on the cluster.
 
-A personal or organizational Git repository containing the manifests detailed in Module 3.
+* Cluster Administrator (cluster-admin) privileges.
 
-Step 1: Commit Manifests to Git
+* A personal or organizational Git repository containing the manifests detailed in Module 3.
+
+1. Commit Manifests to Git
 Clone your Git repository, create the folder structure under your foundation directory, paste the manifests above (updating the repoURL in the Application manifest), and push to your main branch.
 
-Step 2: Apply the ArgoCD Application
+2. Apply the ArgoCD Application
 Log into your OpenShift cluster via CLI and apply the root application manifest:
 
 
@@ -170,10 +167,10 @@ Log into your OpenShift cluster via CLI and apply the root application manifest:
 oc apply -f clusters/management/apps/compliance-operator-app.yaml
 ```
 
-Step 3: Monitor in the ArgoCD Dashboard
+3. Monitor in the ArgoCD Dashboard
 Extract your ArgoCD admin password:
 
-``bash
+```bash
 oc extract secret/openshift-gitops-cluster-cluster --to=- -n openshift-gitops
 ```
 
@@ -185,7 +182,7 @@ oc get route openshift-gitops-server -n openshift-gitops -o jsonpath='{.spec.hos
 
 Navigate to the dashboard. You should see the compliance-operator application moving from OutOfSync to Synced as it builds out the Namespace, OperatorGroup, and Subscription.
 
-Step 4: Verify Compliance Operator Health
+4. Verify Compliance Operator Health
 Once synchronized, verify that the Custom Resource Definitions (CRDs) have been populated and that the manager pods are operational:
 
 ```bash
@@ -198,9 +195,8 @@ oc get pods -n openshift-compliance
 
 You should see pods matching compliance-operator-XXXXX and ocp-profile-parser-XXXXX in a Running status.
 
-Appendix: References & Resources
-* LaunchAdoption-OCPVirt Core Repository - Structural guide and upstream pattern comparisons.
-* Red Hat Compliance Operator Official Installation Guide - Reference for manual parameters, catalog names, and scan definitions.
-* OpenShift GitOps Documentation - Continuous delivery engine architecture.
+# Appendix: References & Resources
+* [Red Hat Compliance Operator Official Installation Guide](https://docs.redhat.com/en/documentation/openshift_container_platform/4.9/html/security_and_compliance/compliance-operator#compliance-operator-installation) - Reference for manual parameters, catalog names, and scan definitions.
+* [OpenShift GitOps Documentation](https://www.google.com/search?q=https://docs.redhat.com/en/documentation/openshift_gitops/) - Continuous delivery engine architecture.
 
 
