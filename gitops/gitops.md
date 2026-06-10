@@ -90,7 +90,7 @@ metadata:
 Scopes the multi-tenant operator to monitor the dedicated compliance namespace.
 
 ```yaml
-apiVersion: [operators.coreos.com/v1](https://operators.coreos.com/v1)
+apiVersion: operators.coreos.com/v1
 kind: OperatorGroup
 metadata:
   name: compliance-operator
@@ -105,7 +105,7 @@ Subscribes to the Red Hat catalog to fetch and maintain updates for the operator
 
 
 ```yaml
-apiVersion: [operators.coreos.com/v1alpha1](https://operators.coreos.com/v1alpha1)
+apiVersion: operators.coreos.com/v1alpha1
 kind: Subscription
 metadata:
   name: compliance-operator
@@ -130,11 +130,11 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: '[https://github.com/](https://github.com/)<your-org>/gitops-foundation.git'
+    repoURL: https://github.com/<your-org>/gitops-foundation.git
     targetRevision: HEAD
     path: infrastructure/compliance-operator
   destination:
-    server: '[https://kubernetes.default.svc](https://kubernetes.default.svc)'
+    server: https://kubernetes.default.svc
     namespace: openshift-compliance
   syncPolicy:
     automated:
@@ -195,8 +195,135 @@ oc get pods -n openshift-compliance
 
 You should see pods matching compliance-operator-XXXXX and ocp-profile-parser-XXXXX in a Running status.
 
+## Laboratory Exercise: Scan the cluster for Compliance
+
+Next, we will update the ScanSettings and ScanSettingBinding to scan the cluster.
+
+```text
+.
+├── clusters
+│   └── management
+│       └── apps
+│           └── scan-settings-app.yaml
+└── infrastructure
+    └── compliance-scans
+        ├── scan-settings-binding.yaml
+        └── scan-settings-custom.yaml
+
+```
+
+1. Review the manifests
+
+The Application manifest points to the Git repository:
+
+```yaml
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: scan-settings
+  namespace: openshift-gitops
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/mike4263/scan-settings.git
+    targetRevision: HEAD
+    path: infrastructure/compliance-scans
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: openshift-compliance
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+```
+
+```yaml
+kind: ScanSetting
+apiVersion: compliance.openshift.io/v1alpha1
+autoApplyRemediations: false
+debug: true
+metadata:
+  name: custom
+  namespace: openshift-compliance
+rawResultStorage:
+  rotation: 10
+  size: 2Gi
+roles:
+  - worker
+  - master
+schedule: 0 1 * * *
+```
+
+```yaml
+kind: ScanSettingBinding
+apiVersion: compliance.openshift.io/v1alpha1
+metadata:
+  name: nist-moderate
+  namespace: openshift-compliance
+profiles:
+  - apiGroup: compliance.openshift.io/v1alpha1
+    kind: Profile
+    name: rhcos4-moderate
+settingsRef:
+  apiGroup: compliance.openshift.io/v1alpha1
+  kind: ScanSetting
+  name: custom
+```
+
+2. Apply the Application
+
+```bash
+oc apply -f clusters/management/apps/scan-settings-app.yaml
+```
+
+
+3. Return to the ArgoCD Dashboard
+
+Note that the ScanSetting and ScanSettingBinding objects have been created.  
+
+This has kicked off a scan immediately.  The scans can take up to 10 minutes.
+
+
+4. Manually modify the ScanSetting
+
+From the main OCP web console, goto **Ecosystem > Installed Operators**
+
+Click **Compliance Operator**
+
+Scroll to the right and select **ScanSetting**
+
+Note the annotation *argocd.argoproj.io/tracking-id* which identifies that this object was configured using ArgoCD.  
+
+
+Make some changes to the file, i.e. remove the master role and change the cron job
+
+5. Reload the Object
+
+The change will be detected by the Kubernetes admission controller and instantly reverted to the state that it appears in the Git repository.
+
+
+6. Review the results
+
+Since this is an unsecured default installation there will be many scan failures.
+
+View the results that can be instantly remediated.
+
+```bash
+oc get -n openshift-compliance compliancecheckresults \
+-l 'compliance.openshift.io/check-status=FAIL,compliance.openshift.io/automated-remediation'
+```
+
+
+List all failing checks sorted by severity
+
+```bash
+oc get compliancecheckresults -n openshift-compliance \
+-l 'compliance.openshift.io/check-status=FAIL,compliance.openshift.io/check-severity=high'
+```
+
+
 # Appendix: References & Resources
-* [Red Hat Compliance Operator Official Installation Guide](https://docs.redhat.com/en/documentation/openshift_container_platform/4.9/html/security_and_compliance/compliance-operator#compliance-operator-installation) - Reference for manual parameters, catalog names, and scan definitions.
-* [OpenShift GitOps Documentation](https://www.google.com/search?q=https://docs.redhat.com/en/documentation/openshift_gitops/) - Continuous delivery engine architecture.
+* [Red Hat Compliance Operator Official Installation Guide](https://docs.redhat.com/en/documentation/openshift_container_platform/4.21/html/security_and_compliance/compliance-operator#compliance-operator-installation) - Reference for manual parameters, catalog names, and scan definitions.
+* [OpenShift GitOps Documentation](https://docs.redhat.com/en/documentation/openshift_gitops/) - Continuous delivery engine architecture.
 
 

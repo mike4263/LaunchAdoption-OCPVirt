@@ -13,7 +13,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@400;500;700;900&family=Red+Hat+Text:wght@400;500;700&family=Red+Hat+Mono:wght@400;700&display=swap" rel="stylesheet">
   
   <style>
-    /* === RESET & BASE DESIGN SYSTEM === */
+    /* === RESET & BRAND VARIABLE TOKENS === */
     * {
       box-sizing: border-box;
       margin: 0;
@@ -23,8 +23,8 @@
     :root {
       color-scheme: dark;
       
-      /* Red Hat Core Dark Palette Mapping */
-      --bg-primary: #000000;        /* black */
+      /* Core Dark Palette Layout */
+      --bg-primary: #000000;        /* UX Black */
       --bg-secondary: #1f1f1f;      /* gray-90 */
       --bg-surface: #292929;        /* gray-80 */
       --text-primary: #ffffff;      /* white */
@@ -38,7 +38,7 @@
       --icon-filter: brightness(0) invert(1);
       --icon-filter-accent: invert(12%) sepia(100%) saturate(10000%) hue-rotate(0deg) brightness(95%);
 
-      /* Typography Mappings */
+      /* Typography Families */
       --font-heading: 'Red Hat Display', sans-serif;
       --font-body: 'Red Hat Text', sans-serif;
       --font-mono: 'Red Hat Mono', monospace;
@@ -55,27 +55,26 @@
       width: 100vw;
     }
 
-    /* === BRAND GLOW (AMBIENT LIGHT) === */
+    /* === BRAND GLOW EFFECTS === */
     .slide::before {
       content: '';
       position: absolute;
       top: -20%;
       right: -10%;
-      width: 70%;
-      height: 70%;
-      background: radial-gradient(ellipse, rgba(238, 0, 0, 0.07) 0%, transparent 75%);
+      width: 60%;
+      height: 60%;
+      background: radial-gradient(ellipse, rgba(238, 0, 0, 0.08) 0%, transparent 70%);
       pointer-events: none;
       z-index: 0;
     }
 
-    /* Alternate ambient glow location on even slides for dynamic movement */
     .slide:nth-child(even)::before {
-      top: 40%;
-      left: -20%;
+      top: 50%;
+      left: -10%;
       background: radial-gradient(ellipse, rgba(238, 0, 0, 0.04) 0%, transparent 70%);
     }
 
-    /* === DECK CONTAINER === */
+    /* === INTERACTIVE ENGINE === */
     .deck {
       position: relative;
       width: 100%;
@@ -101,8 +100,8 @@
       display: flex;
     }
 
-    /* === TYPOGRAPHY & ELEMENTS === */
-    h1, h2, h3, h4 {
+    /* === TYPOGRAPHY HIERARCHY === */
+    h1, h2, h3 {
       font-family: var(--font-heading);
       font-weight: 700;
       line-height: 1.2;
@@ -110,6 +109,7 @@
 
     h1 {
       font-size: var(--rh-font-size-heading-2xl, 3rem);
+      font-weight: 900;
       letter-spacing: -0.02em;
     }
 
@@ -130,15 +130,15 @@
       color: var(--accent);
     }
 
-    /* === LOGO & BRAND SVGS === */
+    /* === LOGO SVGS === */
     .rh-logo {
       height: 28px;
       width: auto;
     }
     .rh-logo.small { height: 20px; }
-    .rh-logo.large { height: 48px; }
+    .rh-logo.large { height: 40px; }
 
-    /* === ICON SYSTEM === */
+    /* === ICON CONTROLS === */
     .rh-icon {
       height: 48px;
       width: 48px;
@@ -146,12 +146,11 @@
       vertical-align: middle;
     }
     .rh-icon.small  { height: 24px; width: 24px; }
-    .rh-icon.medium { height: 48px; width: 48px; }
-    .rh-icon.large  { height: 64px; width: 64px; }
-    .rh-icon.xl     { height: 110px; width: 110px; }
+    .rh-icon.medium { height: 36px; width: 36px; }
+    .rh-icon.xl     { height: 96px; width: 96px; }
     .rh-icon.accent { filter: var(--icon-filter-accent); }
 
-    /* === BREADCRUMB HEADER === */
+    /* === NAVIGATION LAYOUTS === */
     .breadcrumb {
       display: flex;
       align-items: center;
@@ -165,12 +164,6 @@
       z-index: 10;
     }
 
-    .breadcrumb span {
-      display: flex;
-      align-items: center;
-    }
-
-    /* === TAGS === */
     .tags-container {
       display: flex;
       flex-wrap: wrap;
@@ -195,7 +188,6 @@
       color: var(--accent);
     }
 
-    /* === CONTROLS & NAVIGATION FOOTER === */
     .controls {
       position: absolute;
       bottom: 0;
@@ -222,7 +214,7 @@
       color: var(--text-secondary);
     }
 
-    /* === NOTES PANEL === */
+    /* === CONTEXTUAL CONSOLE SIDE PANEL === */
     .notes-panel {
       position: absolute;
       top: 0;
@@ -246,15 +238,13 @@
       font-size: var(--rh-font-size-heading-sm, 1.25rem);
       color: var(--accent-light);
       margin-bottom: var(--rh-space-md, 16px);
-      font-family: var(--font-heading);
       text-transform: uppercase;
     }
 
-    .notes-panel p {
+    .notes-panel p, .notes-panel li {
       font-size: var(--rh-font-size-body-text-sm, 0.875rem);
       color: var(--text-secondary);
       line-height: 1.6;
-      margin-bottom: var(--rh-space-md, 16px);
     }
 
     .notes-panel ul {
@@ -262,15 +252,9 @@
       margin-bottom: var(--rh-space-md, 16px);
     }
 
-    .notes-panel li {
-      font-size: var(--rh-font-size-body-text-sm, 0.875rem);
-      color: var(--text-secondary);
-      margin-bottom: var(--rh-space-xs, 4px);
-    }
-
     .image-opp {
-      background-color: rgba(238, 0, 0, 0.1);
-      border: 1px solid var(--accent);
+      background-color: rgba(238, 0, 0, 0.06);
+      border: 1px solid var(--accent-dark);
       padding: var(--rh-space-md, 16px);
       border-radius: var(--rh-border-radius-default, 3px);
       margin-top: var(--rh-space-lg, 24px);
@@ -295,11 +279,11 @@
     .slide.active .animate-in:nth-child(5) { animation-delay: 0.4s; }
 
     @keyframes fadeSlideUp {
-      from { opacity: 0; transform: translateY(20px); }
+      from { opacity: 0; transform: translateY(15px); }
       to   { opacity: 1; transform: translateY(0); }
     }
 
-    /* === COMPLEX CONTENT SCHEMES & COLUMNS === */
+    /* === GRIDS & DIAGRAM ENGINE === */
     .slide-body {
       flex: 1;
       display: flex;
@@ -324,7 +308,6 @@
       gap: var(--rh-space-xl, 32px);
     }
 
-    /* Custom architecture structures */
     .arch-canvas {
       background-color: var(--bg-secondary);
       border: 1px solid var(--tag-border);
@@ -338,8 +321,6 @@
       border-left: 3px solid var(--tag-border);
       border-radius: var(--rh-border-radius-default, 3px);
       padding: var(--rh-space-lg, 24px);
-      box-shadow: var(--rh-box-shadow-sm, 0 2px 4px 0 rgba(21, 21, 21, 0.2));
-      transition: border-color 0.3s ease;
     }
 
     .card.accent {
@@ -351,101 +332,81 @@
       margin-bottom: var(--rh-space-sm, 8px);
     }
 
-    /* Monospace / Code blocks */
     pre {
-      background-color: #0d0d0d;
+      background-color: #0b0b0b;
       border: 1px solid var(--tag-border);
       border-radius: var(--rh-border-radius-default, 3px);
       padding: var(--rh-space-lg, 24px);
       overflow-x: auto;
       font-family: var(--font-mono);
       font-size: var(--rh-font-size-body-text-sm, 0.875rem);
-      color: #71e371; /* High contrast terminal green */
-      box-shadow: inset 0 2px 10px rgba(0,0,0,0.5);
+      color: #71e371;
     }
 
     code {
       font-family: var(--font-mono);
-      color: var(--accent-light);
     }
 
-    /* Terminal commands utility */
-    .cmd-line {
-      display: block;
-      margin-bottom: var(--rh-space-xs, 4px);
-    }
     .cmd-prompt {
       color: var(--text-muted);
       user-select: none;
     }
+    
     .cmd-comment {
       color: var(--text-muted);
       font-style: italic;
     }
 
-    /* Stat styling */
     .big-number {
       font-family: var(--font-heading);
-      font-size: 6rem;
+      font-size: var(--rh-font-size-heading-2xl, 5rem);
       font-weight: 900;
       line-height: 1;
       color: var(--accent);
     }
 
-    .attribution {
-      font-size: var(--rh-font-size-body-text-xs, 0.75rem);
-      color: var(--text-muted);
-      margin-top: var(--rh-space-md, 16px);
-      font-style: italic;
-    }
-
-    /* Diagram Node Connections */
-    .diagram-flow {
+    /* Virtualization CSS Stack Layout */
+    .virt-stack {
       display: flex;
-      align-items: center;
-      justify-content: space-between;
+      flex-direction: column;
+      gap: 6px;
       width: 100%;
-      margin: var(--rh-space-lg, 24px) 0;
+      font-family: var(--font-body);
     }
 
-    .diagram-node {
-      background-color: var(--bg-surface);
-      border: 2px solid var(--tag-border);
-      border-radius: var(--rh-border-radius-default, 3px);
-      padding: var(--rh-space-md, 16px);
+    .apps-row, .os-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+    }
+
+    .virt-box {
       text-align: center;
-      flex: 1;
-      max-width: 250px;
-      z-index: 2;
+      padding: 12px 4px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      border-radius: var(--rh-border-radius-sharp, 0px);
     }
 
-    .diagram-node.active-node {
-      border-color: var(--accent);
-      box-shadow: 0 0 15px rgba(238, 0, 0, 0.2);
+    .virt-app {
+      height: 70px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
     }
 
-    .diagram-arrow {
-      flex: 0.5;
-      height: 2px;
-      background-color: var(--tag-border);
-      position: relative;
-      margin: 0 var(--rh-space-sm, 8px);
+    .virt-os {
+      height: 90px;
+      color: white;
     }
 
-    .diagram-arrow::after {
-      content: '▶';
-      position: absolute;
-      right: -4px;
-      top: -7px;
-      color: var(--tag-border);
-      font-size: 10px;
-    }
-
-    .diagram-arrow.active-arrow {
-      background-color: var(--accent);
-    }
-    .diagram-arrow.active-arrow::after {
-      color: var(--accent);
+    .diag-icon {
+      width: 20px;
+      height: 20px;
+      margin-bottom: 4px;
+      filter: var(--icon-filter);
     }
   </style>
 </head>
@@ -462,7 +423,7 @@
           <path d="M160,72.07c1.73,8.19,1.73,9.05,1.73,10.13,0,14-15.74,21.77-36.43,21.77C78.54,104,37.58,76.6,37.58,58.49a18.45,18.45,0,0,1,1.51-7.33l3.66-9.06A6.43,6.43,0,0,0,42.53,44c0,9.22,36.3,39.45,84.94,39.45,12.51,0,30.61-2.58,30.61-17.46a14,14,0,0,0-.31-3.42Z"/>
           <path d="M579.74,92.8c0,11.89,7.15,17.67,20.19,17.67a52.11,52.11,0,0,0,11.89-1.68V95a24.84,24.84,0,0,1-7.68,1.16c-5.37,0-7.36-1.68-7.36-6.73V68.3h15.56V54.1H596.78v-18l-17,3.68V54.1H568.49V68.3h11.25Zm-53,.32c0-3.68,3.69-5.47,9.26-5.47a43.12,43.12,0,0,1,10.1,1.26v7.15a21.51,21.51,0,0,1-10.63,2.63c-5.46,0-8.73-2.1-8.73-5.57m5.2,17.56c6,0,10.84-1.26,15.36-4.31v3.37h16.82V74.08c0-13.56-9.14-21-24.39-21-8.52,0-16.94,2-26,6.1l6.1,12.52c6.52-2.74,12-4.42,16.83-4.42,7,0,10.62,2.73,10.62,8.31v2.73a49.53,49.53,0,0,0-12.62-1.58c-14.31,0-22.93,6-22.93,16.73,0,9.78,7.78,17.24,20.19,17.24m-92.44-.94h18.09V80.92h30.29v28.82H506V36.12H487.93V64.41H457.64V36.12H439.55ZM370.62,81.87c0-8,6.31-14.1,14.62-14.1A17.22,17.22,0,0,1,397,72.09V91.54A16.36,16.36,0,0,1,385.24,96c-8.2,0-14.62-6.1-14.62-14.09m26.61,27.87h16.83V32.44l-17,3.68V57.05a28.3,28.3,0,0,0-14.2-3.68c-16.19,0-28.92,12.51-28.92,28.5a28.25,28.25,0,0,0,28.4,28.6,25.12,25.12,0,0,0,14.93-4.83ZM320,67c5.36,0,9.88,3.47,11.67,8.83H308.47C310.15,70.3,314.36,67,320,67M291.33,82c0,16.2,13.25,28.82,30.28,28.82,9.36,0,16.2-2.53,23.25-8.42l-11.26-10c-2.63,2.74-6.52,4.21-11.14,4.21a14.39,14.39,0,0,1-13.68-8.83h39.65V83.55c0-17.67-11.88-30.39-28.08-30.39a28.57,28.57,0,0,0-29,28.81M262,51.58c6,0,9.36,3.78,9.36,8.31S268,68.2,262,68.2H244.11V51.58Zm-36,58.16h18.09V82.92h13.77l13.89,26.82H292l-16.2-29.45a22.27,22.27,0,0,0,13.88-20.72c0-13.25-10.41-23.45-26-23.45H226Z" fill="#fff"/>
         </svg>
-        <span>› LaunchAdoption Program</span>
+        <span>› VA Brown Bag Session</span>
       </div>
       <div class="slide-body">
         <p class="animate-in" style="font-family: var(--font-mono); color: var(--accent); margin-bottom: var(--rh-space-sm, 8px); text-transform: uppercase; letter-spacing: 0.15em;">
@@ -484,53 +445,60 @@
       </div>
       <div class="slide-footer animate-in" style="display: flex; justify-content: space-between; align-items: flex-end;">
         <div style="font-family: var(--font-mono); font-size: var(--rh-font-size-body-text-xs, 0.75rem); color: var(--text-muted);">
-          RED HAT GLOBAL ENABLEMENT COHORT
+          RED HAT
         </div>
         <div style="text-align: right;">
-          <p style="font-size: var(--rh-font-size-body-text-sm, 0.875rem); color: var(--text-secondary); margin-bottom: 0;">Author: Platform Solutions Group</p>
-          <p style="font-size: var(--rh-font-size-body-text-xs, 0.75rem); color: var(--text-muted); margin-bottom: 0;">Date: February 2026</p>
+          <p style="font-size: var(--rh-font-size-body-text-sm, 0.875rem); color: var(--text-secondary); margin-bottom: 0;">Author: Mike Battles (mbattles@redhat.com) &amp; Nick Burr (nicholas.burr@va.gov)</p>
+          <p style="font-size: var(--rh-font-size-body-text-xs, 0.75rem); color: var(--text-muted); margin-bottom: 0;">Date: June 2026</p>
         </div>
       </div>
     </div>
 
-    <div class="slide" data-notes="<h3>Presenter Notes — OpenShift 101</h3><p><b>Context:</b> Many understand vanilla Kubernetes, but we need to emphasize that OpenShift is an <i>Enterprise-ready</i> application platform.</p><p><b>Discussion Point:</b> Walk through the hierarchy: Projects encapsulate Namespaces, pods reside inside deployments, and routing layers (Routes) simplify external exposure instead of complex manual ingress rules. Custom Operators extend the APIs.</p>">
+<div class="slide" data-notes="<h3>Presenter View: Slide 2</h3><p><b>KubeVirt Context:</b> Emphasize that OpenShift abstracts infrastructure so that bare-metal containers and traditional virtualized workloads via KubeVirt share a uniform networking and platform topology.</p>">
       <div class="breadcrumb">
-        <span>Platform Architecture › Module 1</span>
+        <span>Architecture Framework › Module 1</span>
       </div>
       <div class="slide-body">
-        <h2 class="animate-in">What is Red Hat OpenShift?</h2>
+        <h2 class="animate-in">Core Architectural Concepts</h2>
         <div class="grid-2 animate-in">
           <div>
             <p style="font-size: var(--rh-font-size-body-text-xl, 1.25rem); color: var(--text-primary); margin-bottom: var(--rh-space-lg, 24px);">
-              OpenShift is more than Kubernetes. It is a full-stack automated operations system extending from underlying OS infrastructure to platform and dev frameworks.
+              OpenShift unifies container orchestration with comprehensive platform operations, lifecycle management, and virtualization.
             </p>
             <div style="display: flex; align-items: flex-start; gap: var(--rh-space-md, 16px); margin-bottom: var(--rh-space-md, 16px);">
-              <img class="rh-icon small accent" src="https://cdn.jsdelivr.net/npm/@rhds/icons@2.1.0/standard/server.svg" alt="CoreOS">
+              <img class="rh-icon small accent" src="https://cdn.jsdelivr.net/npm/@rhds/icons@2.1.0/standard/virtual-machine.svg" alt="VM">
               <div>
-                <strong style="display:block;">Enterprise Linux CoreOS (RHCOS)</strong>
-                <span style="font-size: 15px; color: var(--text-secondary);">An immutable, container-optimized operating system directly tied to the platform lifecycle.</span>
+                <strong style="display:block;">Native Virtualization (KubeVirt)</strong>
+                <span style="font-size: 15px; color: var(--text-secondary);">Integrates legacy VM workloads natively directly alongside standard container instances into a single control plane.</span>
+              </div>
+            </div>
+            <div style="display: flex; align-items: flex-start; gap: var(--rh-space-md, 16px); margin-bottom: var(--rh-space-md, 16px);">
+              <img class="rh-icon small accent" src="https://cdn.jsdelivr.net/npm/@rhds/icons@2.1.0/standard/kubernetes-pod.svg" alt="Pod">
+              <div>
+                <strong style="display:block;">Projects & Isolated Namespaces</strong>
+                <span style="font-size: 15px; color: var(--text-secondary);">Wraps Kubernetes namespaces with metadata enhancements, default quotas, and robust RBAC bindings.</span>
               </div>
             </div>
             <div style="display: flex; align-items: flex-start; gap: var(--rh-space-md, 16px);">
-              <img class="rh-icon small accent" src="https://cdn.jsdelivr.net/npm/@rhds/icons@2.1.0/standard/kubernetes-pod.svg" alt="Operators">
+              <img class="rh-icon small accent" src="https://cdn.jsdelivr.net/npm/@rhds/icons@2.1.0/standard/automation.svg" alt="Operator">
               <div>
-                <strong style="display:block;">Operator Lifecycle Manager (OLM)</strong>
-                <span style="font-size: 15px; color: var(--text-secondary);">Decodes human operational knowledge into reliable, self-tuning automation.</span>
+                <strong style="display:block;">Operator Orchestration (OLM)</strong>
+                <span style="font-size: 15px; color: var(--text-secondary);">Encapsulates human operational know-how into smart custom controllers via Custom Resource Definitions (CRDs).</span>
               </div>
             </div>
           </div>
           <div class="arch-canvas">
-            <h3 style="margin-bottom: var(--rh-space-md, 16px); font-family: var(--font-mono); font-size: 15px; color: var(--accent);">[ PLATFORM RUNTIME COMPONENT HEIRARCHY ]</h3>
+            <h3 style="margin-bottom: var(--rh-space-md, 16px); font-family: var(--font-mono); font-size: 14px; color: var(--accent);">[ UNIFIED KUBERNETES LAYER ]</h3>
             <div style="display:flex; flex-direction:column; gap: var(--rh-space-sm, 8px);">
-              <div style="border: 1px dashed var(--accent); padding: 12px; border-radius: var(--rh-border-radius-default, 3px);">
-                <div style="font-family: var(--font-mono); font-size: 12px; color: var(--text-secondary);">OCP Project / Namespace (RBAC, Quotas)</div>
-                <div style="margin-top: 8px; background-color: var(--bg-surface); padding: 8px; border-radius: var(--rh-border-radius-default, 3px); display:flex; justify-content:space-between; align-items:center;">
-                  <span style="font-size: 14px;">OpenShift Route</span>
-                  <span style="color: var(--accent); font-family: var(--font-mono); font-size: 12px;">→ Public URL</span>
+              <div style="border: 1px dashed var(--accent); padding: var(--rh-space-md, 16px); border-radius: var(--rh-border-radius-default, 3px);">
+                <div style="font-family: var(--font-mono); font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">OpenShift Project Wrapper</div>
+                <div style="background-color: var(--bg-surface); padding: 10px; border-radius: var(--rh-border-radius-default, 3px); margin-bottom: 8px; display:flex; justify-content:space-between;">
+                  <span style="font-size:14px;">Container Pods</span>
+                  <span style="font-family:var(--font-mono); font-size:11px; color:var(--accent-light);">Kubernetes</span>
                 </div>
-                <div style="margin-top: 8px; background-color: var(--bg-surface); padding: 8px; border-radius: var(--rh-border-radius-default, 3px); display:flex; justify-content:space-between; align-items:center;">
-                  <span style="font-size: 14px;">Deployments & Pods</span>
-                  <span style="color: var(--text-muted); font-family: var(--font-mono); font-size: 12px;">Scale: 1-N</span>
+                <div style="background-color: var(--bg-surface); padding: 10px; border-radius: var(--rh-border-radius-default, 3px); display:flex; justify-content:space-between; border-left: 2px solid var(--accent);">
+                  <span style="font-size:14px; font-weight:bold;">Virtual Machines</span>
+                  <span style="font-family:var(--font-mono); font-size:11px; color:var(--accent);">KubeVirt API</span>
                 </div>
               </div>
             </div>
@@ -538,6 +506,8 @@
         </div>
       </div>
     </div>
+
+
 
     <div class="slide" data-notes="<h3>Presenter Notes — GitOps Philosophy</h3><p><b>Core Philosophy:</b> Ground the audience on why GitOps matters. It translates developers' best practices of git commits, pull requests, and auditable pipelines directly onto infrastructure deployment tasks.</p><p><b>Action:</b> Cover each of the four tenets carefully. The system is declarative, state is kept under git, deployment is fully automated, and state drift is self-healed.</p>">
       <div class="breadcrumb">
@@ -589,9 +559,9 @@
         </h1>
         <div class="big-number animate-in">100%</div>
         <p class="animate-in" style="font-size: var(--rh-font-size-body-text-xl, 1.25rem); color: var(--text-primary); max-width: 800px; margin-top: var(--rh-space-md, 16px);">
-          Automated node configuration and platform verification using OpenSCAP profiles. Built, operated, and maintained via declarative pipelines.
+          Automated node configuration and platform verification using OpenSCAP profiles with the Compliance Operator. Built, operated, and maintained via declarative pipelines.
         </p>
-        <p class="attribution animate-in">Compatible with: CIS Profiles · NIST SP 800-53 · HIPAA · PCI-DSS</p>
+        <p class="attribution animate-in">Configured with three STIG profiles in the 1.0.1 production baseline</p>
       </div>
     </div>
 
@@ -805,8 +775,8 @@ spec:
         </div>
 
         <div class="animate-in" style="margin-bottom: var(--rh-space-md, 16px);">
-          <p style="font-size: var(--rh-font-size-body-text-sm, 0.875rem); color: var(--text-secondary); margin-bottom: 2px;">Presenter: Platform Solutions Engineering Team</p>
-          <p style="font-size: var(--rh-font-size-body-text-xs, 0.75rem); color: var(--text-muted); margin-bottom: 0;">Red Hat Enablement Platform 2026</p>
+          <p style="font-size: var(--rh-font-size-body-text-sm, 0.875rem); color: var(--text-secondary); margin-bottom: 2px;">Presenter: Mike and Nick</p>
+          <p style="font-size: var(--rh-font-size-body-text-xs, 0.75rem); color: var(--text-muted); margin-bottom: 0;">Red Hat 2026</p>
         </div>
 
         <div class="logo-footer animate-in">
