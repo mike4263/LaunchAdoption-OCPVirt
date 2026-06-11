@@ -448,7 +448,7 @@
           RED HAT
         </div>
         <div style="text-align: right;">
-          <p style="font-size: var(--rh-font-size-body-text-sm, 0.875rem); color: var(--text-secondary); margin-bottom: 0;">Author: Mike Battles (mbattles@redhat.com) &amp; Nick Burr (nicholas.burr@va.gov)</p>
+          <p style="font-size: var(--rh-font-size-body-text-sm, 0.875rem); color: var(--text-secondary); margin-bottom: 0;">Author: Mike Battles (mbattles@redhat.com) &amp; Nick Burr (nicholas.burr1@va.gov)</p>
           <p style="font-size: var(--rh-font-size-body-text-xs, 0.75rem); color: var(--text-muted); margin-bottom: 0;">Date: June 2026</p>
         </div>
       </div>
@@ -600,9 +600,52 @@
       </div>
     </div>
 
+    <div class="slide" data-notes="<h3>Presenter Notes — ArgoCD App Custom Resource</h3><p><b>Focus:</b> This is the engine glue. Explain what properties syncPolicy controls. Prune=true means resources removed from Git are instantly removed from the cluster. selfHeal=true enforces zero-drift manual correction.</p><p><b>Key Property:</b> Note how we pass syncOptions 'CreateNamespace=true' to guarantee our cluster creates our namespace coordinates before pulling the operators.</p>">
+      <div class="breadcrumb">
+        <span>ArgoCD Blueprint › Module 3.2</span>
+      </div>
+      <div class="slide-body">
+        <h2 class="animate-in">The Application Manifest</h2>
+        <div class="grid-2 animate-in">
+          <div>
+            <p style="font-size: var(--rh-font-size-body-text-xl, 1.25rem); color: var(--text-primary); margin-bottom: var(--rh-space-md, 16px);">
+              The ArgoCD Application Custom Resource binds your target Git manifests straight onto cluster coordinates.
+            </p>
+            <ul style="margin-left: var(--rh-space-md, 16px); display:flex; flex-direction:column; gap: var(--rh-space-sm, 8px);">
+              <li><code>repoURL</code>: Configures where ArgoCD points to monitor updates.</li>
+              <li><code>path</code>: Navigates downstream configurations to apply.</li>
+              <li><code>prune & selfHeal</code>: Instructs automatic correction and clean operations during structural deletion events.</li>
+            </ul>
+          </div>
+          <div>
+            <pre style="font-size: 12px;"><code style="color: #71e371;">apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: compliance-operator
+  namespace: openshift-gitops
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/your-org/gitops-foundation.git'
+    targetRevision: HEAD
+    path: infrastructure/compliance-operator
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: openshift-compliance
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true</code></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="slide" data-notes="<h3>Presenter Notes — Operator Manifests</h3><p><b>Walkthrough:</b> Walk developers through the three required manifests for a successful installation.</p><p><b>Breakdown:</b> 1) The Namespace sets up monitoring parameters. 2) The OperatorGroup targets that namespace. 3) The Subscription references the 'redhat-operators' marketplace index to fetch the stable release.</p>">
       <div class="breadcrumb">
-        <span>Component Manifests › Module 3.2</span>
+        <span>Component Manifests › Module 3.3</span>
       </div>
       <div class="slide-body">
         <h2 class="animate-in">The Manifest Elements</h2>
@@ -622,7 +665,7 @@ metadata:
   labels:
     openshift.io/cluster-monitoring: "true"</code></pre>
           </div>
-          
+
           <div class="card" style="border-top: 3px solid var(--accent-dark); border-left: none;">
             <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
               <span class="tag" style="padding: 2px 8px;">2</span>
@@ -660,49 +703,6 @@ spec:
   name: compliance-operator
   source: redhat-operators
   sourceNamespace: openshift-marketplace</code></pre>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="slide" data-notes="<h3>Presenter Notes — ArgoCD App Custom Resource</h3><p><b>Focus:</b> This is the engine glue. Explain what properties syncPolicy controls. Prune=true means resources removed from Git are instantly removed from the cluster. selfHeal=true enforces zero-drift manual correction.</p><p><b>Key Property:</b> Note how we pass syncOptions 'CreateNamespace=true' to guarantee our cluster creates our namespace coordinates before pulling the operators.</p>">
-      <div class="breadcrumb">
-        <span>ArgoCD Blueprint › Module 3.3</span>
-      </div>
-      <div class="slide-body">
-        <h2 class="animate-in">The Application Manifest</h2>
-        <div class="grid-2 animate-in">
-          <div>
-            <p style="font-size: var(--rh-font-size-body-text-xl, 1.25rem); color: var(--text-primary); margin-bottom: var(--rh-space-md, 16px);">
-              The ArgoCD Application Custom Resource binds your target Git manifests straight onto cluster coordinates.
-            </p>
-            <ul style="margin-left: var(--rh-space-md, 16px); display:flex; flex-direction:column; gap: var(--rh-space-sm, 8px);">
-              <li><code>repoURL</code>: Configures where ArgoCD points to monitor updates.</li>
-              <li><code>path</code>: Navigates downstream configurations to apply.</li>
-              <li><code>prune & selfHeal</code>: Instructs automatic correction and clean operations during structural deletion events.</li>
-            </ul>
-          </div>
-          <div>
-            <pre style="font-size: 12px;"><code style="color: #71e371;">apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: compliance-operator
-  namespace: openshift-gitops
-spec:
-  project: default
-  source:
-    repoURL: 'https://github.com/your-org/gitops-foundation.git'
-    targetRevision: HEAD
-    path: infrastructure/compliance-operator
-  destination:
-    server: 'https://kubernetes.default.svc'
-    namespace: openshift-compliance
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
-    syncOptions:
-      - CreateNamespace=true</code></pre>
           </div>
         </div>
       </div>
